@@ -175,9 +175,13 @@ export default new Vuex.Store({
       );
       myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
+      const urlencoded = new URLSearchParams();
+      urlencoded.append('token', 'YourToken'); // Reemplaza "YourToken" con el token correcto
+
       const requestOptions = {
         method: 'DELETE',
         headers: myHeaders,
+        body: urlencoded,
         redirect: 'follow'
       };
 
