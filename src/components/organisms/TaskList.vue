@@ -10,7 +10,7 @@
     <TaskForm
       v-if="showEditTaskDialog"
       :task="currentTask"
-      @close="showEditTaskDialog = false"
+      @close="cancelEditTask"
       @submit="updateTask"
     />
   </v-container>
@@ -46,6 +46,7 @@ export default {
     async addTask(task) {
       await this.$store.dispatch('addTask', task);
       this.showAddTaskDialog = false;
+      await this.$store.dispatch('fetchTasks'); // Fetch tareas despues del post
     },
     editTask(task) {
       this.currentTask = task;
@@ -54,9 +55,15 @@ export default {
     async updateTask(task) {
       await this.$store.dispatch('updateTask', task);
       this.showEditTaskDialog = false;
+      await this.$store.dispatch('fetchTasks'); // Fetch tareas despues del update
     },
     async deleteTask(taskId) {
       await this.$store.dispatch('deleteTask', taskId);
+      await this.$store.dispatch('fetchTasks'); // Fetch tareas despues del delete
+    },
+    cancelEditTask() {
+      this.showEditTaskDialog = false;
+      this.currentTask = null;
     }
   }
 };

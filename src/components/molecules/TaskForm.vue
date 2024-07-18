@@ -27,6 +27,7 @@
     <v-text-field label="Tags" v-model="localTask.tags" required></v-text-field>
     <v-checkbox label="Completed" v-model="localTask.is_completed"></v-checkbox>
     <v-btn type="submit" color="primary">Submit</v-btn>
+    <v-btn @click="handleCancel" color="secondary">Cancel</v-btn>
   </v-form>
 </template>
 
@@ -55,6 +56,9 @@ export default {
   methods: {
     handleSubmit() {
       this.$emit('submit', this.localTask);
+    },
+    handleCancel() {
+      this.$emit('close');
     }
   }
 };

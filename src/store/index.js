@@ -3,41 +3,46 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+// Definimos las variables del token API y el parámetro del token desde los environment variables
+const apiToken = process.env.VUE_APP_API_TOKEN;
+const apiTokenParam = process.env.VUE_APP_API_TOKEN_PARAM;
+
 export default new Vuex.Store({
   state: {
-    tasks: [],
-    task: null
+    tasks: [],  // Estado para almacenar todas las tareas
+    task: null  // Estado para almacenar una tarea individual
   },
   mutations: {
+    // Mutación para establecer todas las tareas en el estado
     SET_TASKS(state, tasks) {
       state.tasks = tasks;
     },
+    // Mutación para establecer una tarea individual en el estado
     SET_TASK(state, task) {
       state.task = task;
     },
+    // Mutación para agregar una nueva tarea al estado
     ADD_TASK(state, task) {
       state.tasks.push(task);
     },
+    // Mutación para actualizar una tarea existente en el estado
     UPDATE_TASK(state, updatedTask) {
       const index = state.tasks.findIndex((task) => task.id === updatedTask.id);
       if (index !== -1) {
         Vue.set(state.tasks, index, updatedTask);
       }
     },
+    // Mutación para eliminar una tarea del estado
     DELETE_TASK(state, taskId) {
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
     }
   },
   actions: {
+    // Acción para obtener todas las tareas
     async fetchTasks({ commit }) {
       const myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd'
-      );
-
-      const params = new URLSearchParams();
-      params.append('token', 'YourToken'); // Reemplaza "YourToken" con el token correcto
+      myHeaders.append('Authorization', `Bearer ${apiToken}`);
+      myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
       const requestOptions = {
         method: 'GET',
@@ -47,7 +52,7 @@ export default new Vuex.Store({
 
       try {
         const response = await fetch(
-          `https://ecsdevapi.nextline.mx/vdev/tasks-challenge/tasks?${params.toString()}`,
+          `https://ecsdevapi.nextline.mx/vdev/tasks-challenge/tasks?token=${apiTokenParam}`,
           requestOptions
         );
         if (!response.ok) {
@@ -61,12 +66,11 @@ export default new Vuex.Store({
         throw error;
       }
     },
+    // Acción para obtener una tarea específica por su ID
     async fetchTask({ commit }, taskId) {
       const myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd'
-      );
+      myHeaders.append('Authorization', `Bearer ${apiToken}`);
+      myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
       const requestOptions = {
         method: 'GET',
@@ -76,7 +80,7 @@ export default new Vuex.Store({
 
       try {
         const response = await fetch(
-          `https://ecsdevapi.nextline.mx/vdev/tasks-challenge/tasks/${taskId}`,
+          `https://ecsdevapi.nextline.mx/vdev/tasks-challenge/tasks/${taskId}?token=${apiTokenParam}`,
           requestOptions
         );
         if (!response.ok) {
@@ -89,16 +93,14 @@ export default new Vuex.Store({
         throw error;
       }
     },
+    // Acción para agregar una nueva tarea
     async addTask({ commit }, task) {
       const myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd'
-      );
+      myHeaders.append('Authorization', `Bearer ${apiToken}`);
       myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
       const urlencoded = new URLSearchParams();
-      urlencoded.append('token', 'YourToken'); // Reemplaza "YourToken" con el token correcto si es necesario
+      urlencoded.append('token', apiTokenParam); // Uso del token
       urlencoded.append('title', task.title);
       urlencoded.append('is_completed', task.is_completed ? '1' : '0');
       urlencoded.append('due_date', task.due_date);
@@ -128,16 +130,14 @@ export default new Vuex.Store({
         throw error;
       }
     },
+    // Acción para actualizar una tarea existente
     async updateTask({ commit }, task) {
       const myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd'
-      );
+      myHeaders.append('Authorization', `Bearer ${apiToken}`);
       myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
       const urlencoded = new URLSearchParams();
-      urlencoded.append('token', 'YourToken'); // Reemplaza "YourToken" con el token correcto si es necesario
+      urlencoded.append('token', apiTokenParam); // Uso del token
       urlencoded.append('title', task.title);
       urlencoded.append('is_completed', task.is_completed ? '1' : '0');
       urlencoded.append('due_date', task.due_date);
@@ -167,16 +167,14 @@ export default new Vuex.Store({
         throw error;
       }
     },
+    // Acción para eliminar una tarea
     async deleteTask({ commit }, taskId) {
       const myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd'
-      );
+      myHeaders.append('Authorization', `Bearer ${apiToken}`);
       myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
       const urlencoded = new URLSearchParams();
-      urlencoded.append('token', 'YourToken'); // Reemplaza "YourToken" con el token correcto
+      urlencoded.append('token', apiTokenParam); // Uso del token
 
       const requestOptions = {
         method: 'DELETE',
@@ -201,7 +199,7 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    tasks: (state) => state.tasks,
-    task: (state) => state.task
+    tasks: (state) => state.tasks, // Getter para obtener todas las tareas
+    task: (state) => state.task     // Getter para obtener una tarea específica
   }
 });
