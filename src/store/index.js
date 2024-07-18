@@ -9,8 +9,8 @@ const apiTokenParam = process.env.VUE_APP_API_TOKEN_PARAM;
 
 export default new Vuex.Store({
   state: {
-    tasks: [],  // Estado para almacenar todas las tareas
-    task: null  // Estado para almacenar una tarea individual
+    tasks: [], // Estado para almacenar todas las tareas
+    task: null // Estado para almacenar una tarea individual
   },
   mutations: {
     // Mutación para establecer todas las tareas en el estado
@@ -200,6 +200,6 @@ export default new Vuex.Store({
   },
   getters: {
     tasks: (state) => state.tasks, // Getter para obtener todas las tareas
-    task: (state) => state.task     // Getter para obtener una tarea específica
+    task: (state) => state.task // Getter para obtener una tarea específica
   }
 });
